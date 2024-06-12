@@ -52,6 +52,7 @@ V. SAFETY:
 
 
 Conclusive Statements and Cause-Consequence Combinations:
+
 Note: The conclusive statements are valid only if their respective questions are **False** i.e., **No**
 
 1. You are likely to experience acidity, bloating, constipation – related to - Ia, Ic, Ie, IIa
