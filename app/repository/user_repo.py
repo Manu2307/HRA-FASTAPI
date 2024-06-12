@@ -1,36 +1,25 @@
 from app.models import User
 from app.repository.sql_context import SqlContext
+from app.lib.singleton import Singleton
+
+from app.repository.common_ops import CommonDbOperations
 
 
-class UserOperations:
+class UserOperations(metaclass=Singleton):
     def __init__(self):
         self.model = User
 
     def register_user(self, user_details):
-        user = self.model()
-        user.set_attributes(user_details)
+        user_details = CommonDbOperations(self.model).create_record(user_details)
 
-        with SqlContext() as sql_context:
-            sql_context.session.add(user)
-
-        return user
+        return user_details
 
     def get_user_by_id(self, user_id):
-        user = self.model()
-        with SqlContext() as sql_context:
-            user_details = sql_context.session.query(user).filter(user.id == user_id).scalar()
+        user_details = CommonDbOperations(self.model).get_by_id(user_id)
 
         return user_details
 
     def get_user_by_email_id(self, email_id):
-        user = self.model()
-        print("HI")
-        with SqlContext() as sql_context:
-            print("Hello")
-            try:
-                user_details = sql_context.session.query(user).filter(user.email == email_id).all()
-
-            except Exception as ex:
-                print(str(ex))
+        user_details = CommonDbOperations(self.model).get_by_email(email_id)
 
         return user_details

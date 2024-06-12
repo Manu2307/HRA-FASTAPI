@@ -2,20 +2,20 @@ from pydantic import UUID4
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from uuid import uuid4
 from datetime import datetime
 import json
 
-from config import DB_DRIVER, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, SQLALCHEMY_DATABASE_URL
+from config import DB_DRIVER, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME
 
-# SQLALCHEMY_DATABASE_URL = f"{DB_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+SQLALCHEMY_DATABASE_URL = f"{DB_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, pool_pre_ping=True
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, expire_on_commit=False)
 
 Base = declarative_base()
 
@@ -36,11 +36,12 @@ class BaseModel(Base):
 
 class AuditCreateModel(Base):
     __abstract__ = True
+    is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.now())
     created_by = Column(String, default="System")
 
 
 class AuditUpdateModel(Base):
     __abstract__ = True
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now())
-    updated_by = Column(String, default="System")
+    updated_at = Column(DateTime, onupdate=datetime.now(), nullable=True)
+    updated_by = Column(String, nullable=True)

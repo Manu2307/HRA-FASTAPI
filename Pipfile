@@ -8,9 +8,9 @@ fastapi = "*"
 black = "*"
 uvicorn = "*"
 python-dotenv = "*"
-sqlalchemy = "==1.4.48"
 alembic = "*"
 psycopg2-binary = "*"
+sqlalchemy = "==1.4.48"
 
 [dev-packages]
 pytest = "*"

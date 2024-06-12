@@ -1,7 +1,7 @@
 import os
 import dotenv
-dotenv.load_dotenv()
 
+dotenv.load_dotenv()
 
 DB_URL = os.environ.get('DB_URL')
 DB_NAME = os.environ.get('DB_NAME')
